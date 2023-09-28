@@ -1,7 +1,11 @@
 dist
 node_modules
-worker
-package-lock.json
-yarn.lock
-yarn-error.log
-wrangler.toml
+.bot-*
+node_modules
+*.lock
+.env*
+*.vars
+coverage
+*.lock
+*-lock.json
+*-error.log

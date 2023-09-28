@@ -9,7 +9,8 @@
     "deploy": "wrangler publish ./src/index.ts",
     "lint": "eslint ./src",
     "lint:staged": "lint-staged",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "set_secrets": "./set_secrets_from_dev_vars"
   },
   "license": "MIT",
   "dependencies": {

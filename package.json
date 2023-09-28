@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "wrangler dev ./src/index.ts",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "deploy": "wrangler publish ./src/index.ts"
   },
   "license": "MIT",
   "dependencies": {

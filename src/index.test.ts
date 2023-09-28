@@ -1,5 +1,10 @@
-describe('main test', () => {
-  it('should be okay', () => {
-    expect(1).toBe(1);
+import app from '.';
+
+describe('app', () => {
+  it('GET /', async () => {
+    const res = await app.request('http://localhost/');
+    expect(res.status).toBe(200);
+    const text = await res.text();
+    expect(text).toBe('Hello world Hono! (lint)');
   });
 });

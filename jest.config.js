@@ -1,7 +1,7 @@
 module.exports = {
-  testEnvironment: 'miniflare',
-  testMatch: ['**/*.test.ts'],
-  transform: {
-    '^.+\\.tsx?$': 'esbuild-jest',
-  },
-}
+	testEnvironment: 'miniflare',
+	testMatch: ['**/*.test.ts'],
+	transform: {
+		'^.+\\.tsx?$': 'esbuild-jest',
+	},
+};

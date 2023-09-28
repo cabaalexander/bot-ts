@@ -7,6 +7,7 @@ module.exports = {
 	overrides: [
 		{
 			extends: [
+				'plugin:@typescript-eslint/recommended',
 				'xo-typescript/space',
 			],
 			files: [

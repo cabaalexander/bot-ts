@@ -1,8 +1,5 @@
-import {Hono} from 'hono';
-import {type Bindings} from './types';
+import app from './api';
 
-const app = new Hono<{Bindings: Bindings}>();
-
-app.get('/', c => c.text('Hello world Hono! (lint) [action]'));
+app.get('/', c => c.text('👋 Hello there!'));
 
 export default app;

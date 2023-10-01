@@ -1,3 +1,6 @@
 name = "bot-ts"
 main = "src/index.ts"
 compatibility_date = "2023-05-27"
+
+[miniflare]
+env_path = ".dev.vars"

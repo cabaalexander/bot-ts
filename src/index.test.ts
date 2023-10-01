@@ -5,6 +5,6 @@ describe('app', () => {
     const res = await app.request('http://localhost/');
     expect(res.status).toBe(200);
     const text = await res.text();
-    expect(text).toBe('Hello world Hono! (lint) [action]');
+    expect(text).toBe('👋 Hello there!');
   });
 });

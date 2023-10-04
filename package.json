@@ -5,7 +5,7 @@
     "dev": "wrangler dev ./src/index.ts",
     "test": "jest --verbose",
     "test:staged": "yarn jest --bail --findRelatedTests",
-    "test:watch": "yarn jest --watch --coverage",
+    "test:watch": "yarn jest --verbose --watch --coverage",
     "deploy": "wrangler publish ./src/index.ts",
     "lint": "eslint ./src",
     "lint:staged": "lint-staged",
@@ -16,7 +16,8 @@
   "license": "MIT",
   "dependencies": {
     "discord-interactions": "^3.4.0",
-    "hono": "^3.3.4"
+    "hono": "^3.3.4",
+    "zod": "^3.22.3"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230215.0",

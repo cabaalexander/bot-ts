@@ -2,6 +2,7 @@ import {type Next, type MiddlewareHandler} from 'hono/dist/types/types';
 import {logInfo} from '../utils/log';
 import {type ContextCustom} from '../types';
 import {verifyKey} from 'discord-interactions';
+import jsonResponse from '../utils/json-response';
 
 export default function verifyDiscordRequest(): MiddlewareHandler {
   return async (c: ContextCustom, next: Next) => {
@@ -25,7 +26,9 @@ export default function verifyDiscordRequest(): MiddlewareHandler {
     );
 
     if (!isValidRequest) {
-      return new Response('Bad request signature.', {status: 401});
+      return jsonResponse({
+        ok: false, msg: 'Bad request signature.',
+      }, {status: 401});
     }
 
     await next();

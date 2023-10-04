@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "wrangler dev ./src/index.ts",
-    "test": "jest --verbose",
+    "test": "jest --verbose --coverage",
     "test:staged": "yarn jest --bail --findRelatedTests",
-    "test:watch": "yarn jest --verbose --watch --coverage",
+    "test:watch": "yarn test --watch",
     "deploy": "wrangler publish ./src/index.ts",
     "lint": "eslint ./src",
     "lint:staged": "lint-staged",

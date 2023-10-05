@@ -6,7 +6,7 @@
     "test": "jest --verbose --coverage",
     "test:staged": "yarn jest --bail --findRelatedTests",
     "test:watch": "yarn test --watch",
-    "deploy": "wrangler publish ./src/index.ts",
+    "deploy": "wrangler deploy ./src/index.ts",
     "lint": "eslint ./src",
     "lint:staged": "lint-staged",
     "prepare": "husky install",

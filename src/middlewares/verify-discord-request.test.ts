@@ -1,8 +1,8 @@
 import {Hono} from 'hono';
 import verifyDiscordRequest from './verify-discord-request';
+import env from '../config/env';
 
 describe('verify-discord-request', () => {
-  const env = getMiniflareBindings();
   let app: Hono;
 
   beforeEach(() => {

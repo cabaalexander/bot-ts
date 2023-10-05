@@ -10,7 +10,3 @@ export type Bindings = {
 };
 
 export type ContextCustom = Context<{Bindings: Bindings}>;
-
-declare global {
-  function getMiniflareBindings(): Bindings;
-}

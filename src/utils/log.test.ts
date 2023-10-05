@@ -1,3 +1,4 @@
+import env from '../config/env';
 import {logError, logInfo} from './log';
 
 describe('log', () => {
@@ -15,10 +16,22 @@ describe('log', () => {
   });
 
   it('should log info provided', () => {
+    env.NO_LOG = '';
+
     logInfo('hello info');
     expect(log).toBeCalledWith('--[info]', 'hello info');
 
     logError('hello error');
     expect(error).toBeCalledWith('hello error');
+  });
+
+  it('should not log', () => {
+    env.NO_LOG = '1';
+
+    logInfo('zup');
+    expect(log).not.toBeCalled();
+
+    logError('m8');
+    expect(error).not.toBeCalled();
   });
 });

@@ -9,3 +9,4 @@ coverage
 *.lock
 *-lock.json
 *-error.log
+.wrangler

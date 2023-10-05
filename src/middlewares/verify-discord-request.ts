@@ -1,6 +1,6 @@
 import {type Next, type MiddlewareHandler} from 'hono/dist/types/types';
 import {logInfo} from '../utils/log';
-import {type ContextCustom} from '../types';
+import {type ContextCustom} from '../config/types';
 import {verifyKey} from 'discord-interactions';
 import jsonResponse from '../utils/json-response';
 

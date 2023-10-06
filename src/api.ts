@@ -5,7 +5,6 @@ import discordPing from './middlewares/discord-ping';
 
 const app = new Hono<{Bindings: Bindings}>();
 
-app.use(verifyDiscordRequest());
-app.use(discordPing());
+app.use(verifyDiscordRequest(), discordPing());
 
 export default app;

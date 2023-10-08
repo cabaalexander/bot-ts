@@ -42,6 +42,6 @@ describe('verify-discord-request', () => {
 
     expect(res.status).toBe(401);
     expect(data.ok).toBe(false);
-    expect(data.msg).toBe('Bad request signature.');
+    expect(data.msg).toBe('verifyKey failed');
   });
 });

@@ -1,16 +1,25 @@
-import {z} from 'zod';
+import {type z} from 'zod';
+import {type responseSchemaError} from '../config/zod';
 
-const dataSchema = z.record(z.unknown());
-
-type Data = z.infer<typeof dataSchema>;
-
-export default function jsonResponse(
-  data: Data = {},
+export default function jsonResponse<T>(
+  schema: z.Schema<T>,
+  data: T,
   options?: ResponseInit,
 ): Response {
-  const {success} = dataSchema.safeParse(data);
+  let payload: unknown;
+  const parsed = schema.safeParse(data);
 
-  const payload = success ? data : {};
+  if (parsed.success) {
+    payload = data;
+  } else {
+    const zodErrors = parsed.error.issues;
+    const errorPayload: z.infer<typeof responseSchemaError> = {
+      ok: false,
+      errors: zodErrors,
+      msg: 'zod error',
+    };
+    payload = errorPayload;
+  }
 
   return new Response(JSON.stringify(payload), {
     headers: {

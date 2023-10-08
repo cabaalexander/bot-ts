@@ -1,4 +1,4 @@
-import {type Env, type Context} from 'hono';
+import {type Context} from 'hono';
 
 export type Bindings = {
   DISCORD_TOKEN: string;

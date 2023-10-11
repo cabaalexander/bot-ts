@@ -5,6 +5,11 @@ on:
 
 name: ci
 
+env:
+  DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
+  DISCORD_APPLICATION_ID: ${{ secrets.DISCORD_APPLICATION_ID }}
+  DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+
 jobs:
   test:
     runs-on: ubuntu-latest

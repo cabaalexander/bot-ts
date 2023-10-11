@@ -2,11 +2,8 @@ dist
 node_modules
 .bot-*
 node_modules
-*.lock
 .env*
 *.vars
 coverage
-*.lock
-*-lock.json
 *-error.log
 .wrangler

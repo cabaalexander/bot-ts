@@ -4,8 +4,10 @@ export type Bindings = {
   DISCORD_TOKEN: string;
   DISCORD_PUBLIC_KEY: string;
   DISCORD_APPLICATION_ID: string;
-  CF_ACCOUNT_ID: string;
-  CF_API_TOKEN: string;
+  CLOUDFLARE_ACCOUNT_ID: string;
+  CLOUDFLARE_API_TOKEN: string;
+  AUTH_USER: string;
+  AUTH_PASS: string;
   NO_LOG: string | undefined;
 };
 

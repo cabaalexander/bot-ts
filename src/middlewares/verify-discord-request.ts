@@ -6,6 +6,7 @@ import {type ContextCustom} from '../config/types';
 import {verifyKey} from 'discord-interactions';
 import jsonResponse from '../utils/json-response';
 import {responseSchemaError} from '../config/zod';
+import {HTTP_CODE_UNAUTHORIZED} from '../config/constants';
 
 export default function verifyDiscordRequest(): MiddlewareHandler {
   return async (c: ContextCustom, next: Next) => {
@@ -20,7 +21,7 @@ export default function verifyDiscordRequest(): MiddlewareHandler {
     const buf = await c.req.raw.clone().arrayBuffer();
     const errors: unknown[] = [];
 
-    logInfo('Verifying request');
+    logInfo('Verifying request', {env: c.env});
 
     // Catch console.error arguments (verifyKey thing)
     const consoleError = console.error.bind(console);
@@ -39,7 +40,7 @@ export default function verifyDiscordRequest(): MiddlewareHandler {
         ok: false,
         msg: 'verifyKey failed',
         errors,
-      }, {status: 401});
+      }, {status: HTTP_CODE_UNAUTHORIZED});
     }
 
     await next();

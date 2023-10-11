@@ -7,8 +7,9 @@
     "test:staged": "yarn jest --bail --findRelatedTests",
     "test:watch": "yarn test --watchAll",
     "deploy": "wrangler deploy ./src/index.ts",
-    "lint": "eslint ./src",
+    "lint": "yarn type-check && eslint ./src",
     "lint:staged": "lint-staged",
+    "type-check": "tsc --noemit",
     "prepare": "husky install",
     "set_secrets": "./set_secrets_from_dev_vars",
     "tunnel": "ngrok http --domain $NGROK_DOMAIN 8787"

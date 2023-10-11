@@ -15,7 +15,7 @@ export default function discordPing(): MiddlewareHandler {
     const {type} = await c.req.json<{type: InteractionType}>();
 
     if (type === InteractionType.PING) {
-      logInfo('Handling Ping request. Pong!');
+      logInfo('Handling Ping request. Pong!', {env: c.env});
 
       return jsonResponse(responseSchema, {
         type: InteractionResponseType.PONG,

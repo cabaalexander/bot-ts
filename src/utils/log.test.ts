@@ -28,10 +28,10 @@ describe('log', () => {
   it('should not log', () => {
     env.NO_LOG = '1';
 
-    logInfo('zup');
+    logInfo('zup', {env});
     expect(log).not.toBeCalled();
 
-    logError('m8');
+    logError('m8', {env});
     expect(error).not.toBeCalled();
   });
 });

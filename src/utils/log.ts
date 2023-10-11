@@ -1,24 +1,23 @@
 /* eslint-disable no-console */
 
-import {z} from 'zod';
-import env from '../config/env';
+import {type Bindings} from '../config/types';
 
-const logSchema = z.array(z.unknown());
+type LogOptions = {
+  env: Bindings;
+};
 
-type Log = z.infer<typeof logSchema>;
-
-export function logInfo(...args: Log): void {
-  if (env.NO_LOG) {
+export function logInfo(message: string, options?: LogOptions): void {
+  if (options?.env.NO_LOG) {
     return;
   }
 
-  console.log('--[info]', ...args);
+  console.log('--[info]', message);
 }
 
-export function logError(...args: Log) {
-  if (env.NO_LOG) {
+export function logError(message: string, options?: LogOptions) {
+  if (options?.env.NO_LOG) {
     return;
   }
 
-  console.error(...args);
+  console.error(message);
 }

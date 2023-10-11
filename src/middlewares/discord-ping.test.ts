@@ -1,6 +1,7 @@
 import {Hono} from 'hono';
 import discordPing from './discord-ping';
 import {InteractionResponseType, InteractionType} from 'discord-interactions';
+import env from '../config/env';
 
 describe('discord-ping', () => {
   let app: Hono;
@@ -30,7 +31,7 @@ describe('discord-ping', () => {
         type: InteractionType.PING,
       }),
     });
-    const res = await app.request(req);
+    const res = await app.fetch(req, env);
 
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({type: InteractionResponseType.PONG});

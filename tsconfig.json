@@ -12,5 +12,6 @@
       "@cloudflare/workers-types",
       "jest",
     ],
+    "skipLibCheck": true,
   }
 }

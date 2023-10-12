@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "lint:staged": "lint-staged",
     "check-types": "tsc --noEmit --pretty",
+    "format": "eslint --fix . && prettier '**/*.{json,yaml}' --write --ignore-path .gitignore",
     "prepare": "husky install",
     "set_secrets": "./set_secrets_from_dev_vars",
     "tunnel": "ngrok http --domain $NGROK_DOMAIN 8787"

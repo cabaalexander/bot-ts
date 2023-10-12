@@ -16,7 +16,7 @@ describe.skip('discordRequest', () => {
   });
 
   it('should list commands', async () => {
-    const res = await discordRequest(endpoint, {env});
+    const res = await discordRequest(endpoint, { env });
     expect(res.status).toBe(200);
   });
 
@@ -29,7 +29,7 @@ describe.skip('discordRequest', () => {
       },
       env,
     });
-    const data: {id: string} = await res.json();
+    const data: { id: string } = await res.json();
 
     testCommandId = data.id;
 

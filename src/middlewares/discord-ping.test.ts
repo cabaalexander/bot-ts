@@ -1,7 +1,8 @@
-import {Hono} from 'hono';
-import discordPing from './discord-ping';
-import {InteractionResponseType, InteractionType} from 'discord-interactions';
+import { InteractionResponseType, InteractionType } from 'discord-interactions';
+import { Hono } from 'hono';
+
 import env from '../config/env';
+import discordPing from './discord-ping';
 
 describe('discord-ping', () => {
   let app: Hono;
@@ -12,7 +13,7 @@ describe('discord-ping', () => {
   });
 
   it('should exit if method is not post', async () => {
-    app.get('/', c => c.text('hello m8'));
+    app.get('/', (c) => c.text('hello m8'));
 
     const req = new Request('http://localhost/');
     const res = await app.request(req);
@@ -34,11 +35,11 @@ describe('discord-ping', () => {
     const res = await app.fetch(req, env);
 
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({type: InteractionResponseType.PONG});
+    expect(await res.json()).toEqual({ type: InteractionResponseType.PONG });
   });
 
   it('should handle non ping requests', async () => {
-    app.post('/', c => c.json({data: 'test success'}));
+    app.post('/', (c) => c.json({ data: 'test success' }));
 
     const req = new Request('http://localhost/', {
       method: 'POST',
@@ -47,6 +48,6 @@ describe('discord-ping', () => {
     const res = await app.request(req);
 
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({data: 'test success'});
+    expect(await res.json()).toEqual({ data: 'test success' });
   });
 });

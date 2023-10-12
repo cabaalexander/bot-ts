@@ -1,6 +1,6 @@
-import {APP_NAME, DISCORD_API_ROOT} from '../config/constants';
-import {type Bindings} from '../config/types';
-import {responseSchemaError} from '../config/zod';
+import { APP_NAME, DISCORD_API_ROOT } from '../config/constants';
+import { type Bindings } from '../config/types';
+import { responseSchemaError } from '../config/zod';
 import jsonResponse from './json-response';
 
 export default async function discordRequest(
@@ -11,7 +11,7 @@ export default async function discordRequest(
   } & Omit<RequestInit, 'body'>,
 ): Promise<Response> {
   const url = `${DISCORD_API_ROOT}${endpoint}`;
-  const {body, env, ...optionsRest} = options;
+  const { body, env, ...optionsRest } = options;
   const bodyString = JSON.stringify(body);
   const fetchOptions = {
     headers: {
@@ -31,9 +31,13 @@ export default async function discordRequest(
 
   const data = await res.json();
 
-  return jsonResponse(responseSchemaError, {
-    ok: false,
-    errors: [data],
-    msg: 'discord request',
-  }, {status: res.status});
+  return jsonResponse(
+    responseSchemaError,
+    {
+      ok: false,
+      errors: [data],
+      msg: 'discord request',
+    },
+    { status: res.status },
+  );
 }

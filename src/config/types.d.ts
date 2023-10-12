@@ -1,4 +1,4 @@
-import {type Context} from 'hono';
+import { type Context } from 'hono';
 
 export type Bindings = {
   DISCORD_TOKEN: string;
@@ -11,4 +11,4 @@ export type Bindings = {
   NO_LOG: string | undefined;
 };
 
-export type ContextCustom = Context<{Bindings: Bindings}>;
+export type ContextCustom = Context<{ Bindings: Bindings }>;

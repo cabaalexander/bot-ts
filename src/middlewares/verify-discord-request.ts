@@ -1,12 +1,13 @@
 /* eslint-disable no-console */
 
-import {type Next, type MiddlewareHandler} from 'hono/dist/types/types';
-import {logInfo} from '../utils/log';
-import {type ContextCustom} from '../config/types';
-import {verifyKey} from 'discord-interactions';
+import { verifyKey } from 'discord-interactions';
+import { type MiddlewareHandler, type Next } from 'hono/dist/types/types';
+
+import { HTTP_CODE_UNAUTHORIZED } from '../config/constants';
+import { type ContextCustom } from '../config/types';
+import { responseSchemaError } from '../config/zod';
 import jsonResponse from '../utils/json-response';
-import {responseSchemaError} from '../config/zod';
-import {HTTP_CODE_UNAUTHORIZED} from '../config/constants';
+import { logInfo } from '../utils/log';
 
 export default function verifyDiscordRequest(): MiddlewareHandler {
   return async (c: ContextCustom, next: Next) => {
@@ -21,26 +22,26 @@ export default function verifyDiscordRequest(): MiddlewareHandler {
     const buf = await c.req.raw.clone().arrayBuffer();
     const errors: unknown[] = [];
 
-    logInfo('Verifying request', {env: c.env});
+    logInfo('Verifying request', { env: c.env });
 
     // Catch console.error arguments (verifyKey thing)
     const consoleError = console.error.bind(console);
     console.error = (...args) => errors.push(args.slice(1).join(''));
-    const isValidRequest = verifyKey(
-      buf,
-      signature,
-      timestamp,
-      publicKey,
-    );
+    const isValidRequest = verifyKey(buf, signature, timestamp, publicKey);
     // Return console.error to its normal form
     console.error = consoleError;
 
     if (!isValidRequest) {
-      return jsonResponse(responseSchemaError, {
-        ok: false,
-        msg: 'verifyKey failed',
-        errors,
-      }, {status: HTTP_CODE_UNAUTHORIZED});
+      // eslint-disable-next-line
+      return jsonResponse(
+        responseSchemaError,
+        {
+          ok: false,
+          msg: 'verifyKey failed',
+          errors,
+        },
+        { status: HTTP_CODE_UNAUTHORIZED },
+      );
     }
 
     await next();

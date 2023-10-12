@@ -1,7 +1,8 @@
-import {Hono} from 'hono';
-import verifyDiscordRequest from './verify-discord-request';
+import { Hono } from 'hono';
+
+import { HTTP_CODE_OK, HTTP_CODE_UNAUTHORIZED } from '../config/constants';
 import env from '../config/env';
-import {HTTP_CODE_OK, HTTP_CODE_UNAUTHORIZED} from '../config/constants';
+import verifyDiscordRequest from './verify-discord-request';
 
 describe('verify-discord-request', () => {
   let app: Hono;
@@ -12,7 +13,7 @@ describe('verify-discord-request', () => {
   });
 
   it('should exit if method is not post', async () => {
-    app.get('/', c => c.text('c'));
+    app.get('/', (c) => c.text('c'));
 
     const req = new Request('http://localhost/');
     const res = await app.request(req);
@@ -36,10 +37,10 @@ describe('verify-discord-request', () => {
         'x-signature-ed25519': xSignatureEd25519,
         'x-signature-timestamp': '1696256136',
       },
-      body: JSON.stringify({data: 'test data'}),
+      body: JSON.stringify({ data: 'test data' }),
     });
     const res = await app.fetch(req, env);
-    const data = await res.json<{ok: boolean; msg: string}>();
+    const data = await res.json<{ ok: boolean; msg: string }>();
 
     expect(res.status).toBe(HTTP_CODE_UNAUTHORIZED);
     expect(data.ok).toBe(false);

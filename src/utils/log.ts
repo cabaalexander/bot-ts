@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import {type Bindings} from '../config/types';
+import { type Bindings } from '../config/types';
 
 type LogOptions = {
   env: Bindings;

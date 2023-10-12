@@ -1,9 +1,10 @@
-import {type MiddlewareHandler, type Next} from 'hono';
-import {type ContextCustom} from '../config/types';
-import {InteractionResponseType, InteractionType} from 'discord-interactions';
+import { InteractionResponseType, InteractionType } from 'discord-interactions';
+import { type MiddlewareHandler, type Next } from 'hono';
+
+import { type ContextCustom } from '../config/types';
+import { responseSchema } from '../config/zod';
 import jsonResponse from '../utils/json-response';
-import {logInfo} from '../utils/log';
-import {responseSchema} from '../config/zod';
+import { logInfo } from '../utils/log';
 
 export default function discordPing(): MiddlewareHandler {
   return async (c: ContextCustom, next: Next) => {
@@ -12,11 +13,12 @@ export default function discordPing(): MiddlewareHandler {
       return;
     }
 
-    const {type} = await c.req.json<{type: InteractionType}>();
+    const { type } = await c.req.json<{ type: InteractionType }>();
 
     if (type === InteractionType.PING) {
-      logInfo('Handling Ping request. Pong!', {env: c.env});
+      logInfo('Handling Ping request. Pong!', { env: c.env });
 
+      // eslint-disable-next-line
       return jsonResponse(responseSchema, {
         type: InteractionResponseType.PONG,
       });
@@ -25,4 +27,3 @@ export default function discordPing(): MiddlewareHandler {
     await next();
   };
 }
-

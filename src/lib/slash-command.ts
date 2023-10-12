@@ -1,4 +1,4 @@
-import {z} from 'zod';
+import { z } from 'zod';
 
 export default class SlashCommand {
   private name!: string;
@@ -23,8 +23,10 @@ export default class SlashCommand {
   }
 }
 
-export const commandRegisterSchema = z.array(z.object({
-  name: z.string(),
-  description: z.string(),
-  id: z.optional(z.string()),
-}));
+export const commandRegisterSchema = z.array(
+  z.object({
+    name: z.string(),
+    description: z.string(),
+    id: z.optional(z.string()),
+  }),
+);

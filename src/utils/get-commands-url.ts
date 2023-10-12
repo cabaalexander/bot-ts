@@ -1,5 +1,5 @@
-import {type Bindings} from '../config/types';
-import concatUrl from '../utils/concat-url';
+import { type Bindings } from '../config/types';
+import concatUrl from './concat-url';
 
 export default function getCommandsUrl(env: Bindings, ...o: string[]) {
   return concatUrl(

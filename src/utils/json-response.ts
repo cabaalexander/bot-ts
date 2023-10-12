@@ -1,5 +1,6 @@
-import {type z} from 'zod';
-import {type responseSchemaError} from '../config/zod';
+import { type z } from 'zod';
+
+import { type responseSchemaError } from '../config/zod';
 
 export default function jsonResponse<T>(
   schema: z.Schema<T>,

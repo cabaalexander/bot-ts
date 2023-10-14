@@ -23,10 +23,8 @@ export default class SlashCommand {
   }
 }
 
-export const commandRegisterSchema = z.array(
-  z.object({
-    name: z.string(),
-    description: z.string(),
-    id: z.optional(z.string()),
-  }),
-);
+export const slashCommandSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  id: z.optional(z.string()),
+});

@@ -1,18 +1,19 @@
-import { type z } from 'zod';
+import type { z } from 'zod';
 
 import { HTTP_CODE_BAD_REQUEST } from './config/constants';
 import { type ContextCustom } from './config/types';
-import { responseSchemaError } from './config/zod';
-import { commandRegisterSchema } from './lib/slash-command';
+import type { registerCommandsSchema } from './config/zod';
+import { commandsSchema, responseSchemaError } from './config/zod';
 import discordRequest from './utils/discord-request';
 import getCommandsUrl from './utils/get-commands-url';
 import jsonResponse from './utils/json-response';
 
-export default function registerCommands(
-  commands?: z.infer<typeof commandRegisterSchema>,
-) {
+export default function registerCommands({
+  commands,
+  lib,
+}: z.infer<typeof registerCommandsSchema> = {}) {
   return async (c: ContextCustom) => {
-    const commandRegisterParsed = commandRegisterSchema.safeParse(commands);
+    const commandRegisterParsed = commandsSchema.safeParse(commands);
 
     if (!commandRegisterParsed.success) {
       return jsonResponse(
@@ -26,7 +27,7 @@ export default function registerCommands(
       );
     }
 
-    const res = await discordRequest(getCommandsUrl(c.env), {
+    const res = await (lib?.fetch || discordRequest)(getCommandsUrl(c.env), {
       method: 'PUT',
       body: commands,
       env: c.env,

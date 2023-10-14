@@ -1,44 +1,39 @@
 import { Hono } from 'hono';
 
-import { HTTP_CODE_BAD_REQUEST, HTTP_CODE_OK } from './config/constants';
+import { HTTP_CODE_BAD_REQUEST } from './config/constants';
 import env from './config/env';
 import registerCommands from './register';
-import concatUrl from './utils/concat-url';
-import discordRequest from './utils/discord-request';
-import getCommandsUrl from './utils/get-commands-url';
 
-// @TODO: need to mock 'discordRequest' function so it does not hit discord API
-describe.skip('register', () => {
+describe('register', () => {
+  let app: Hono;
+  const req = new Request('http://localhost/register');
   const testCommand = [
     {
       name: 'test-command',
       description: 'description for test command',
     },
   ];
-  const req = new Request('http://localhost/register');
-  let app: Hono;
-  let commands: Array<{ id: string }>;
 
   beforeEach(() => {
     app = new Hono();
   });
 
-  afterAll(() => {
-    commands?.forEach(async (c) => {
-      if (!c.id) {
-        return;
-      }
+  it('should fail registering commands', async () => {
+    app.get(
+      '/register',
+      registerCommands({
+        // @ts-ignore
+        commands: [{ name: 'foobar' }],
+      }),
+    );
 
-      await discordRequest(concatUrl(getCommandsUrl(env), c.id), {
-        env,
-        method: 'DELETE',
-      });
-    });
+    const res = await app.fetch(req, env);
+
+    expect(res.status).toBe(HTTP_CODE_BAD_REQUEST);
   });
 
-  it('should fail registering commands commands', async () => {
-    // @ts-expect-error 2741
-    app.get('/register', registerCommands([{ name: 'foobar' }]));
+  it('should throw error if no parameter is passed', async () => {
+    app.get('/register', registerCommands());
 
     const res = await app.fetch(req, env);
 
@@ -46,16 +41,28 @@ describe.skip('register', () => {
   });
 
   it('should register commands', async () => {
-    app.get('/register', registerCommands(testCommand));
+    const fetchMock = jest.fn().mockReturnValue(new Response('{}'));
 
-    const res = await app.fetch(req, env);
+    app.get(
+      '/register',
+      registerCommands({
+        commands: testCommand,
+        lib: { fetch: fetchMock },
+      }),
+    );
 
-    // Save commands for cleanup (if OK)
-    if (res.status === HTTP_CODE_OK) {
-      const data = await res.json();
-      commands = data as [{ id: string }];
-    }
+    await app.fetch(req, { ok: 'yes' });
+    const expected = [
+      'applications/undefined/commands',
+      {
+        body: [
+          { description: 'description for test command', name: 'test-command' },
+        ],
+        env: { ok: 'yes' },
+        method: 'PUT',
+      },
+    ];
 
-    expect(res.status).toBe(HTTP_CODE_OK);
+    expect(fetchMock).toHaveBeenLastCalledWith(...expected);
   });
 });

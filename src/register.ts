@@ -20,8 +20,8 @@ export default function registerCommands({
         responseSchemaError,
         {
           ok: false,
-          errors: [commandRegisterParsed.error],
           msg: 'register commands',
+          errors: [commandRegisterParsed.error],
         },
         { status: HTTP_CODE_BAD_REQUEST },
       );

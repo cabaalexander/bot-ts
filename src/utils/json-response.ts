@@ -16,8 +16,8 @@ export default function jsonResponse<T>(
     const zodErrors = parsed.error.issues;
     const errorPayload: z.infer<typeof responseSchemaError> = {
       ok: false,
-      errors: zodErrors,
       msg: 'zod error',
+      errors: zodErrors,
     };
     payload = errorPayload;
   }

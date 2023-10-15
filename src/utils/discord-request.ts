@@ -39,8 +39,8 @@ export default async function discordRequest(
     responseSchemaError,
     {
       ok: false,
-      errors: [data],
       msg: 'discord request',
+      errors: [data],
     },
     { status: res.status },
   );

@@ -74,15 +74,20 @@ describe('unregister', () => {
 
     const res = await app.fetch(req, { ok: 'yes' });
     const data = await res.json();
-    const expected = [
+    const fetchMockExpected = [
       'applications/undefined/commands',
       { env: { ok: 'yes' } },
     ];
+    const dataExpected = {
+      errors: ['no commands to unregister were found'],
+      msg: 'unregister commands',
+      ok: false,
+    };
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(fetchMock).toHaveBeenNthCalledWith(1, ...expected);
-    expect(res.status).toBe(HTTP_CODE_OK);
-    expect(data).toStrictEqual([]);
+    expect(fetchMock).toHaveBeenNthCalledWith(1, ...fetchMockExpected);
+    expect(res.status).toBe(HTTP_CODE_BAD_REQUEST);
+    expect(data).toEqual(dataExpected);
   });
 
   it('should unregister commands', async () => {

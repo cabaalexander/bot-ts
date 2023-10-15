@@ -1,4 +1,3 @@
 name = "bot-ts"
 main = "src/index.ts"
 compatibility_date = "2023-05-27"
-node_compat = true

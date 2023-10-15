@@ -25,8 +25,8 @@ export default function unRegisterCommands({
           responseSchemaError,
           {
             ok: false,
-            errors: [commandRegisterParsed.error],
             msg: 'unregister commands',
+            errors: [commandRegisterParsed.error],
           },
           { status: HTTP_CODE_BAD_REQUEST },
         );
@@ -69,6 +69,18 @@ export default function unRegisterCommands({
       }),
     );
 
-    return c.json(commandsReturnData);
+    if (commandsReturnData.length) {
+      return c.json(commandsReturnData);
+    }
+
+    return jsonResponse(
+      responseSchemaError,
+      {
+        ok: false,
+        msg: 'unregister commands',
+        errors: ['no commands to unregister were found'],
+      },
+      { status: HTTP_CODE_BAD_REQUEST },
+    );
   };
 }

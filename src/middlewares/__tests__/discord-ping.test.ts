@@ -1,8 +1,8 @@
 import { InteractionResponseType, InteractionType } from 'discord-interactions';
 import { Hono } from 'hono';
 
-import env from '../config/env';
-import discordPing from './discord-ping';
+import env from '../../config/env';
+import discordPing from '../discord-ping';
 
 describe('discord-ping', () => {
   let app: Hono;

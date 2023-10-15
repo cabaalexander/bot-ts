@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 
-import { HTTP_CODE_OK, HTTP_CODE_UNAUTHORIZED } from '../config/constants';
-import env from '../config/env';
-import verifyDiscordRequest from './verify-discord-request';
+import { HTTP_CODE_OK, HTTP_CODE_UNAUTHORIZED } from '../../config/constants';
+import env from '../../config/env';
+import verifyDiscordRequest from '../verify-discord-request';
 
 describe('verify-discord-request', () => {
   let app: Hono;

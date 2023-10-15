@@ -1,4 +1,4 @@
-import SlashCommand from './slash-command';
+import SlashCommand from '../slash-command';
 
 describe('SlashCommand', () => {
   it('should set name and description', () => {

@@ -5,10 +5,10 @@ import {
   HTTP_CODE_BAD_REQUEST,
   HTTP_CODE_NO_CONTENT,
   HTTP_CODE_OK,
-} from './config/constants';
-import env from './config/env';
-import type { commandsSchema } from './config/zod';
-import unRegisterCommands from './unregister';
+} from '../config/constants';
+import env from '../config/env';
+import type { commandsSchema } from '../config/zod';
+import unRegisterCommands from '../unregister';
 
 describe('unregister', () => {
   let app: Hono;

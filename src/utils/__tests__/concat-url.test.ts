@@ -1,4 +1,4 @@
-import concatUrl from './concat-url';
+import concatUrl from '../concat-url';
 
 describe('concatUrl', () => {
   it('should trim double slashes from url', () => {

@@ -1,7 +1,7 @@
-import { HTTP_CODE_NO_CONTENT, HTTP_CODE_OK } from '../config/constants';
-import env from '../config/env';
-import concatUrl from './concat-url';
-import discordRequest from './discord-request';
+import { HTTP_CODE_NO_CONTENT, HTTP_CODE_OK } from '../../config/constants';
+import env from '../../config/env';
+import concatUrl from '../concat-url';
+import discordRequest from '../discord-request';
 
 describe('discordRequest', () => {
   let testCommandId: string;

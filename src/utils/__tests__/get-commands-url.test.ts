@@ -1,5 +1,5 @@
-import env from '../config/env';
-import getCommandsUrl from './get-commands-url';
+import env from '../../config/env';
+import getCommandsUrl from '../get-commands-url';
 
 describe('getCommandsUrl', () => {
   it('should log root commands url', () => {

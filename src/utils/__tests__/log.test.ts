@@ -1,5 +1,5 @@
-import env from '../config/env';
-import { logError, logInfo } from './log';
+import env from '../../config/env';
+import { logError, logInfo } from '../log';
 
 describe('log', () => {
   let log: jest.SpyInstance;

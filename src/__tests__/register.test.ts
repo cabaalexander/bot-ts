@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 
-import { HTTP_CODE_BAD_REQUEST } from './config/constants';
-import env from './config/env';
-import registerCommands from './register';
+import { HTTP_CODE_BAD_REQUEST } from '../config/constants';
+import env from '../config/env';
+import registerCommands from '../register';
 
 describe('register', () => {
   let app: Hono;

@@ -1,5 +1,5 @@
-import { responseSchema } from '../config/zod';
-import jsonResponse from './json-response';
+import { responseSchema } from '../../config/zod';
+import jsonResponse from '../json-response';
 
 // Little utility function to construct test table
 function getZodError(props: {

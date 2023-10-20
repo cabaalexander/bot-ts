@@ -1,7 +1,6 @@
 import { Hono } from 'hono';
 
 import { HTTP_CODE_OK, HTTP_CODE_UNAUTHORIZED } from '../../config/constants';
-import env from '../../config/env';
 import verifyDiscordRequest from '../verify-discord-request';
 
 describe('verify-discord-request', () => {
@@ -39,7 +38,7 @@ describe('verify-discord-request', () => {
       },
       body: JSON.stringify({ data: 'test data' }),
     });
-    const res = await app.fetch(req, env);
+    const res = await app.fetch(req, {});
     const data = await res.json<{ ok: boolean; msg: string }>();
 
     expect(res.status).toBe(HTTP_CODE_UNAUTHORIZED);

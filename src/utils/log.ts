@@ -1,13 +1,11 @@
 /* eslint-disable no-console */
 
-import { type Bindings } from '../config/types';
-
 type LogOptions = {
-  env: Bindings;
+  noLog: boolean;
 };
 
 export function logInfo(message: string, options?: LogOptions): void {
-  if (options?.env.NO_LOG) {
+  if (options?.noLog) {
     return;
   }
 
@@ -15,7 +13,7 @@ export function logInfo(message: string, options?: LogOptions): void {
 }
 
 export function logError(message: string, options?: LogOptions) {
-  if (options?.env.NO_LOG) {
+  if (options?.noLog) {
     return;
   }
 

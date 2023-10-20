@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 
 import { HTTP_CODE_BAD_REQUEST } from '../config/constants';
-import env from '../config/env';
+import type { Bindings } from '../config/types';
 import registerCommands from '../register';
 
 describe('register', () => {
@@ -27,7 +27,7 @@ describe('register', () => {
       }),
     );
 
-    const res = await app.fetch(req, env);
+    const res = await app.fetch(req);
 
     expect(res.status).toBe(HTTP_CODE_BAD_REQUEST);
   });
@@ -35,7 +35,7 @@ describe('register', () => {
   it('should throw error if no parameter is passed', async () => {
     app.get('/register', registerCommands());
 
-    const res = await app.fetch(req, env);
+    const res = await app.fetch(req);
 
     expect(res.status).toBe(HTTP_CODE_BAD_REQUEST);
   });
@@ -51,14 +51,50 @@ describe('register', () => {
       }),
     );
 
-    await app.fetch(req, { ok: 'yes' });
+    await app.fetch(req, {
+      DISCORD_APPLICATION_ID: '875394',
+      DISCORD_TOKEN: '1938485',
+    } as Partial<Bindings>);
+
     const expected = [
-      'applications/undefined/commands',
+      {
+        endpoint: '/applications/875394/commands',
+        discordToken: '1938485',
+        body: [
+          { description: 'description for test command', name: 'test-command' },
+        ],
+        method: 'PUT',
+      },
+    ];
+
+    expect(fetchMock).toHaveBeenLastCalledWith(...expected);
+  });
+
+  it('should grab the GUILD_ID from param', async () => {
+    const fetchMock = jest.fn().mockReturnValue(new Response('{}'));
+
+    app.get(
+      '/register',
+      registerCommands({
+        commands: testCommand,
+        lib: { fetch: fetchMock },
+      }),
+    );
+
+    const reqQuery = new Request(`${req.url}?guildId=321456987`);
+
+    await app.fetch(reqQuery, {
+      DISCORD_TOKEN: '1924949',
+      DISCORD_APPLICATION_ID: '0989838812',
+    } as Partial<Bindings>);
+
+    const expected = [
       {
         body: [
           { description: 'description for test command', name: 'test-command' },
         ],
-        env: { ok: 'yes' },
+        discordToken: '1924949',
+        endpoint: '/applications/0989838812/guilds/321456987/commands',
         method: 'PUT',
       },
     ];

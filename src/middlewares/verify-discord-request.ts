@@ -22,7 +22,7 @@ export default function verifyDiscordRequest(): MiddlewareHandler {
     const buf = await c.req.raw.clone().arrayBuffer();
     const errors: unknown[] = [];
 
-    logInfo('Verifying request', { env: c.env });
+    logInfo('Verifying request', { noLog: Boolean(c.env.NO_LOG) });
 
     // Catch console.error arguments (verifyKey thing)
     const consoleError = console.error.bind(console);

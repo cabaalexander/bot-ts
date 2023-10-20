@@ -1,26 +1,34 @@
 import { HTTP_CODE_NO_CONTENT, HTTP_CODE_OK } from '../../config/constants';
-import env from '../../config/env';
-import concatUrl from '../concat-url';
 import discordRequest from '../discord-request';
+import getCommandsUrl from '../get-commands-url';
 
 describe('discordRequest', () => {
-  let testCommandId: string;
-  const endpoint = concatUrl(
-    'applications',
-    env.DISCORD_APPLICATION_ID,
-    'commands',
-  );
+  const endpoint = getCommandsUrl({ applicationId: '21212121' });
 
   it('should list commands', async () => {
     const fetchMock = jest
       .fn()
       .mockReturnValue(new Response(JSON.stringify({ c: 'yes' })));
 
-    const res = await discordRequest(endpoint, {
-      env,
+    const res = await discordRequest({
+      endpoint,
+      discordToken: '6565656565',
       lib: { fetch: fetchMock },
     });
+    const fetchMockExpected = [
+      'https://discord.com/api/v10/applications/21212121/commands',
+      {
+        body: undefined,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'User-Agent': 'bot-ts (bot-ts, 1.0.0)',
+          authorization: 'Bot 6565656565',
+        },
+      },
+    ];
+
     expect(res.status).toBe(HTTP_CODE_OK);
+    expect(fetchMock).toHaveBeenCalledWith(...fetchMockExpected);
   });
 
   it('should create a command', async () => {
@@ -28,24 +36,24 @@ describe('discordRequest', () => {
       .fn()
       .mockReturnValue(new Response(JSON.stringify({ c: 'yes' })));
 
-    const res = await discordRequest(endpoint, {
+    const res = await discordRequest({
+      endpoint,
       method: 'POST',
       body: {
         name: 'test-test',
         description: 'test description',
       },
-      env,
+      discordToken: '8686868',
       lib: { fetch: fetchMock },
     });
     const expected = [
-      'https://discord.com/api/v10/applications/1109330842951630858/commands',
+      'https://discord.com/api/v10/applications/21212121/commands',
       {
         body: '{"name":"test-test","description":"test description"}',
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'User-Agent': 'bot-ts (bot-ts, 1.0.0)',
-          authorization:
-            'Bot MTEwOTMzMDg0Mjk1MTYzMDg1OA.GZdDhu.nw_PZ1C6e2TIGxyON8fvLZsckoWaPN_6TtdNY8',
+          authorization: 'Bot 8686868',
         },
         method: 'POST',
       },
@@ -63,20 +71,23 @@ describe('discordRequest', () => {
       }),
     );
 
-    const res = await discordRequest(concatUrl(endpoint, testCommandId), {
+    const res = await discordRequest({
+      endpoint: getCommandsUrl({
+        applicationId: '767676',
+        commandId: '2312385',
+      }),
       method: 'DELETE',
-      env,
+      discordToken: '98766340',
       lib: { fetch: fetchMock },
     });
     const expected = [
-      'https://discord.com/api/v10/applications/1109330842951630858/commands/undefined',
+      'https://discord.com/api/v10/applications/767676/commands/2312385',
       {
         body: undefined,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'User-Agent': 'bot-ts (bot-ts, 1.0.0)',
-          authorization:
-            'Bot MTEwOTMzMDg0Mjk1MTYzMDg1OA.GZdDhu.nw_PZ1C6e2TIGxyON8fvLZsckoWaPN_6TtdNY8',
+          authorization: 'Bot 98766340',
         },
         method: 'DELETE',
       },

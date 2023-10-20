@@ -1,11 +1,25 @@
-import { type Bindings } from '../config/types';
-import concatUrl from './concat-url';
+import { Routes } from 'discord-api-types/v10';
 
-export default function getCommandsUrl(env: Bindings, ...o: string[]) {
-  return concatUrl(
-    'applications',
-    env.DISCORD_APPLICATION_ID,
-    'commands',
-    ...o,
-  );
+export default function getCommandsUrl({
+  applicationId,
+  guildId,
+  commandId,
+}: {
+  applicationId: string;
+  guildId?: string;
+  commandId?: string;
+}) {
+  if (guildId && commandId) {
+    return Routes.applicationGuildCommand(applicationId, guildId, commandId);
+  }
+
+  if (guildId) {
+    return Routes.applicationGuildCommands(applicationId || '', guildId);
+  }
+
+  if (commandId) {
+    return Routes.applicationCommand(applicationId, commandId);
+  }
+
+  return Routes.applicationCommands(applicationId || '');
 }

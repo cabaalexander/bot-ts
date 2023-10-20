@@ -16,6 +16,8 @@ export default function unRegisterCommands({
   lib,
 }: z.infer<typeof registerCommandsSchema> = {}) {
   return async (c: ContextCustom) => {
+    const guildId = c.req.query('guildId');
+
     // If commands is passed make sure is valid
     if (commands) {
       const commandRegisterParsed = commandsSchema.safeParse(commands);
@@ -33,12 +35,13 @@ export default function unRegisterCommands({
       }
     }
 
-    const commandsRes = await (lib?.fetch || discordRequest)(
-      getCommandsUrl(c.env),
-      {
-        env: c.env,
-      },
-    );
+    const commandsRes = await (lib?.fetch || discordRequest)({
+      endpoint: getCommandsUrl({
+        applicationId: c.env.DISCORD_APPLICATION_ID,
+        guildId,
+      }),
+      discordToken: c.env.DISCORD_TOKEN,
+    });
     const commandsData =
       await commandsRes.json<z.infer<typeof commandsSchema>>();
 
@@ -51,13 +54,15 @@ export default function unRegisterCommands({
 
     const commandsReturnData = await Promise.all(
       filteredCommandsData.map(async ({ id = '', name = '' }) => {
-        const res = await (lib?.fetch || discordRequest)(
-          getCommandsUrl(c.env, id),
-          {
-            method: 'DELETE',
-            env: c.env,
-          },
-        );
+        const res = await (lib?.fetch || discordRequest)({
+          endpoint: getCommandsUrl({
+            applicationId: c.env.DISCORD_APPLICATION_ID,
+            guildId,
+            commandId: id,
+          }),
+          method: 'DELETE',
+          discordToken: c.env.DISCORD_TOKEN,
+        });
 
         if (res.status === HTTP_CODE_NO_CONTENT) {
           return { id, name };

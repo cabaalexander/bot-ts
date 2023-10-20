@@ -14,6 +14,7 @@ export default function registerCommands({
 }: z.infer<typeof registerCommandsSchema> = {}) {
   return async (c: ContextCustom) => {
     const commandRegisterParsed = commandsSchema.safeParse(commands);
+    const guildId = c.req.query('guildId');
 
     if (!commandRegisterParsed.success) {
       return jsonResponse(
@@ -27,10 +28,14 @@ export default function registerCommands({
       );
     }
 
-    const res = await (lib?.fetch || discordRequest)(getCommandsUrl(c.env), {
+    const res = await (lib?.fetch || discordRequest)({
+      endpoint: getCommandsUrl({
+        applicationId: c.env.DISCORD_APPLICATION_ID,
+        guildId,
+      }),
       method: 'PUT',
       body: commands,
-      env: c.env,
+      discordToken: c.env.DISCORD_TOKEN,
     });
     const data = await res.json();
 

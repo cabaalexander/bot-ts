@@ -3,9 +3,6 @@
 // APP
 export const APP_NAME = 'bot-ts' as const;
 
-// URLS
-export const DISCORD_API_ROOT = 'https://discord.com/api/v10/' as const;
-
 // STATUS CODES
 export const HTTP_CODE_UNAUTHORIZED = 401 as const;
 export const HTTP_CODE_BAD_REQUEST = 400 as const;

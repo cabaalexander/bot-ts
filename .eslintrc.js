@@ -57,6 +57,14 @@ module.exports = {
         'simple-import-sort/exports': 'error', // Export configuration for `eslint-plugin-simple-import-sort`
         'import/order': 'off', // Avoid conflict rule between `eslint-plugin-import` and `eslint-plugin-simple-import-sort`
         '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/ban-ts-comment': [
+          'error',
+          {
+            'ts-expect-error': {
+              descriptionFormat: '^\\s\\d+$',
+            },
+          },
+        ],
         'unused-imports/no-unused-imports': 'error',
         'unused-imports/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       },

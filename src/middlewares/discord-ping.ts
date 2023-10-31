@@ -19,8 +19,11 @@ export default function discordPing(): MiddlewareHandler {
       logInfo('Handling Ping request. Pong!', { noLog: Boolean(c.env.NO_LOG) });
 
       // eslint-disable-next-line
-      return jsonResponse(responseSchema, {
-        type: InteractionResponseType.PONG,
+      return jsonResponse({
+        schema: responseSchema,
+        body: {
+          type: InteractionResponseType.PONG,
+        },
       });
     }
 

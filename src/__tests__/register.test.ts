@@ -22,7 +22,7 @@ describe('register', () => {
     app.get(
       '/register',
       registerCommands({
-        // @ts-ignore
+        // @ts-expect-error 2741
         commands: [{ name: 'foobar' }],
       }),
     );

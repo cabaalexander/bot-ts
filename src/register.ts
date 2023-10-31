@@ -17,15 +17,15 @@ export default function registerCommands({
     const guildId = c.req.query('guildId');
 
     if (!commandRegisterParsed.success) {
-      return jsonResponse(
-        responseSchemaError,
-        {
+      return jsonResponse({
+        schema: responseSchemaError,
+        body: {
           ok: false,
           msg: 'register commands',
           errors: [commandRegisterParsed.error],
         },
-        { status: HTTP_CODE_BAD_REQUEST },
-      );
+        options: { status: HTTP_CODE_BAD_REQUEST },
+      });
     }
 
     const res = await (lib?.fetch || discordRequest)({

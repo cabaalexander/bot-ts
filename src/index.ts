@@ -1,7 +1,9 @@
 import { Hono } from 'hono';
 import { basicAuth } from 'hono/basic-auth';
 
+import { getCommandsBuild } from './commands';
 import { type Bindings } from './config/types';
+import handleInteraction from './handlers/interaction';
 import discordPing from './middlewares/discord-ping';
 import verifyDiscordRequest from './middlewares/verify-discord-request';
 import registerCommands from './register';
@@ -17,10 +19,10 @@ app.use('/auth/*', async (c, next) => {
   })(c, next);
 });
 
-app.get('/', (c) => c.text('👋 Hello there!'));
+app.get('/', (c) => c.text('👋 Hello there!')).post(handleInteraction());
 
-app.get('/auth/register', registerCommands()).delete(unRegisterCommands());
-
-app.notFound((c) => c.text('Not found path m8. :('));
+app
+  .get('/auth/register', registerCommands({ commands: getCommandsBuild() }))
+  .delete(unRegisterCommands({ commands: getCommandsBuild() }));
 
 export default app;

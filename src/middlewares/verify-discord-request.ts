@@ -33,15 +33,15 @@ export default function verifyDiscordRequest(): MiddlewareHandler {
 
     if (!isValidRequest) {
       // eslint-disable-next-line
-      return jsonResponse(
-        responseSchemaError,
-        {
+      return jsonResponse({
+        schema: responseSchemaError,
+        body: {
           ok: false,
           msg: 'verifyKey failed',
           errors,
         },
-        { status: HTTP_CODE_UNAUTHORIZED },
-      );
+        options: { status: HTTP_CODE_UNAUTHORIZED },
+      });
     }
 
     await next();

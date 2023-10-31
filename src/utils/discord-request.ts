@@ -35,13 +35,13 @@ export default async function discordRequest(
 
   const data = await res.json();
 
-  return jsonResponse(
-    responseSchemaError,
-    {
+  return jsonResponse({
+    schema: responseSchemaError,
+    body: {
       ok: false,
       msg: 'discord request',
       errors: [data],
     },
-    { status: res.status },
-  );
+    options: { status: res.status },
+  });
 }

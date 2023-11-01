@@ -17,9 +17,11 @@ export default function unRegisterCommands({
 }: z.infer<typeof registerCommandsSchema> = {}) {
   return async (c: ContextCustom) => {
     const guildId = c.req.query('guildId');
+    const overrideCommands = c.req.query('all');
+    const shouldUseCommands = commands && !overrideCommands;
 
     // If commands is passed make sure is valid
-    if (commands) {
+    if (shouldUseCommands) {
       const commandRegisterParsed = commandsSchema.safeParse(commands);
 
       if (!commandRegisterParsed.success) {
@@ -46,7 +48,7 @@ export default function unRegisterCommands({
       await commandsRes.json<z.infer<typeof commandsSchema>>();
 
     // If commands parameter is passed filter fetched commands by name
-    const filteredCommandsData = commands
+    const filteredCommandsData = shouldUseCommands
       ? commandsData.filter((cmdData) =>
           commands.find((cmd) => cmdData.name === cmd.name),
         )

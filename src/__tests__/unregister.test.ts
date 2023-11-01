@@ -15,6 +15,7 @@ describe('unregister', () => {
   const req = new Request('http://localhost/unregister', { method: 'DELETE' });
   const commands: z.infer<typeof commandsSchema> = [
     { id: '321a987b456', name: 'some-command', description: 'b' },
+    { id: '81818282', name: 'some-command-two', description: 'd' },
   ];
 
   beforeEach(() => {
@@ -179,6 +180,57 @@ describe('unregister', () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(fetchMock).toHaveBeenNthCalledWith(1, ...expectedMockOne);
     expect(fetchMock).toHaveBeenNthCalledWith(2, ...expectedMockTwo);
+    expect(res.status).toBe(HTTP_CODE_OK);
+    expect(data).toEqual(expectedData);
+  });
+
+  it('should override commands parameter if query parameter "all" is passed', async () => {
+    const fetchMock = jest
+      .fn()
+      .mockReturnValueOnce(new Response(JSON.stringify(commands)))
+      .mockReturnValue(new Response(null, { status: HTTP_CODE_NO_CONTENT }));
+
+    app.delete(
+      '/unregister',
+      unRegisterCommands({
+        commands: [{ name: 'some-command', description: '' }],
+        lib: { fetch: fetchMock },
+      }),
+    );
+    const reqQueryAll = new Request(`${req.url}?all=1`, { method: 'DELETE' });
+
+    const res = await app.fetch(reqQueryAll, {
+      DISCORD_TOKEN: '949494',
+      DISCORD_APPLICATION_ID: '32323232',
+    } as Partial<Bindings>);
+
+    const data: Array<{ name: string }> = await res.json();
+    const expectedData = [
+      { id: '321a987b456', name: 'some-command' },
+      { id: '81818282', name: 'some-command-two' },
+    ];
+    const expectedMockOne = [
+      { discordToken: '949494', endpoint: '/applications/32323232/commands' },
+    ];
+    const expectedMockTwo = [
+      {
+        discordToken: '949494',
+        endpoint: '/applications/32323232/commands/321a987b456',
+        method: 'DELETE',
+      },
+    ];
+    const expectedMockThree = [
+      {
+        discordToken: '949494',
+        endpoint: '/applications/32323232/commands/81818282',
+        method: 'DELETE',
+      },
+    ];
+
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(fetchMock).toHaveBeenNthCalledWith(1, ...expectedMockOne);
+    expect(fetchMock).toHaveBeenNthCalledWith(2, ...expectedMockTwo);
+    expect(fetchMock).toHaveBeenNthCalledWith(3, ...expectedMockThree);
     expect(res.status).toBe(HTTP_CODE_OK);
     expect(data).toEqual(expectedData);
   });

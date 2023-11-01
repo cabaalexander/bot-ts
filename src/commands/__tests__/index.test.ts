@@ -5,7 +5,10 @@ describe('commands', () => {
   it('should get the build structure for all commands', () => {
     const commandsBuild = getCommandsBuild();
     const expected = [
-      { description: 'Welcome to La villa', name: 'game-start' },
+      {
+        description: 'Get an invite link to add the bot to your server',
+        name: 'invite',
+      },
     ];
 
     expect(commandsBuild).toEqual(expected);
@@ -15,7 +18,7 @@ describe('commands', () => {
     const commandsDict = getCommandsDict();
     const oneEntry = Object.entries(commandsDict)[0];
 
-    expect(oneEntry[0]).toBe('game-start');
+    expect(oneEntry[0]).toBe('invite');
     expect(oneEntry[1]).toBeInstanceOf(SlashCommand);
   });
 });

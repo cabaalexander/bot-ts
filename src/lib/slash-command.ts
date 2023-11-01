@@ -1,9 +1,17 @@
 import type { APIInteractionResponse } from 'discord-api-types/v10';
 import { z } from 'zod';
 
+import type { ContextCustom } from '../config/types';
 import type Interaction from './interaction';
 
-type TInteractionCallback = (i: Interaction) => APIInteractionResponse;
+type TInteractionArgs = {
+  i: Interaction;
+  c: ContextCustom;
+};
+type TInteractionCallback = ({
+  i,
+  c,
+}: TInteractionArgs) => APIInteractionResponse;
 
 export default class SlashCommand {
   private name!: string;
@@ -34,8 +42,8 @@ export default class SlashCommand {
     return this;
   }
 
-  public execute(interaction: Interaction): APIInteractionResponse {
-    return this.interactionCallback(interaction);
+  public execute(args: TInteractionArgs): APIInteractionResponse {
+    return this.interactionCallback(args);
   }
 }
 

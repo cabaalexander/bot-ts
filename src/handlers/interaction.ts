@@ -47,7 +47,7 @@ export default function handleInteraction({
           return discordError('command not triggered');
         }
 
-        const body = triggeredCommand.execute(interaction);
+        const body = triggeredCommand.execute({ i: interaction, c });
 
         return jsonResponse({ body });
       }

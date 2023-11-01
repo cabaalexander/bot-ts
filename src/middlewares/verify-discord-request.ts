@@ -9,6 +9,7 @@ import { responseSchemaError } from '../config/zod';
 import jsonResponse from '../utils/json-response';
 import { logInfo } from '../utils/log';
 
+// TODO: change verify method
 export default function verifyDiscordRequest(): MiddlewareHandler {
   return async (c: ContextCustom, next: Next) => {
     if (c.req.method.toLocaleLowerCase() !== 'post') {

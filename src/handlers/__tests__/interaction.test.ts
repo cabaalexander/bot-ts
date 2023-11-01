@@ -2,14 +2,11 @@ import {
   ApplicationCommandType,
   InteractionResponseType,
   InteractionType,
+  MessageFlags,
 } from 'discord-api-types/v10';
 import { Hono } from 'hono';
 
-import {
-  HTTP_CODE_BAD_REQUEST,
-  HTTP_CODE_NOT_FOUND,
-  HTTP_CODE_OK,
-} from '../../config/constants';
+import { HTTP_CODE_BAD_REQUEST, HTTP_CODE_OK } from '../../config/constants';
 import SlashCommand from '../../lib/slash-command';
 import handleInteraction from '../interaction';
 
@@ -51,14 +48,17 @@ describe('handlers/interactions', () => {
     );
 
     const res = await app.request(req);
+    const data = await res.json();
     const expectedBody = {
-      ok: false,
-      errors: ['command not found'],
-      msg: 'interaction error',
+      data: {
+        content: '💥 command not triggered',
+        flags: MessageFlags.Ephemeral,
+      },
+      type: InteractionResponseType.ChannelMessageWithSource,
     };
 
-    expect(res.status).toBe(HTTP_CODE_NOT_FOUND);
-    expect(await res.json()).toEqual(expectedBody);
+    expect(res.status).toBe(HTTP_CODE_OK);
+    expect(data).toEqual(expectedBody);
   });
 
   it('should handle post request with no body', async () => {

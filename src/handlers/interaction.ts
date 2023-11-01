@@ -10,6 +10,7 @@ import {
 import type { ContextCustom } from '../config/types';
 import { responseSchemaError } from '../config/zod';
 import Interaction from '../lib/interaction';
+import discordError from '../utils/discord-error';
 import jsonResponse from '../utils/json-response';
 
 export default function handleInteraction({
@@ -43,15 +44,7 @@ export default function handleInteraction({
         const triggeredCommand = commandsDict[structure.data.name];
 
         if (!triggeredCommand) {
-          return jsonResponse({
-            schema: responseSchemaError,
-            body: {
-              ok: false,
-              errors: ['command not found'],
-              msg: responseErrorMsg,
-            },
-            options: { status: HTTP_CODE_NOT_FOUND },
-          });
+          return discordError('command not triggered');
         }
 
         const body = triggeredCommand.execute(interaction);

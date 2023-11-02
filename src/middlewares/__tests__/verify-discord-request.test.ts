@@ -1,6 +1,8 @@
+import { Buffer } from 'buffer';
 import { Hono } from 'hono';
 
-import { HTTP_CODE_OK, HTTP_CODE_UNAUTHORIZED } from '../../config/constants';
+import { HTTP_CODE_OK } from '../../config/constants';
+import type { Bindings } from '../../config/types';
 import verifyDiscordRequest from '../verify-discord-request';
 
 describe('verify-discord-request', () => {
@@ -8,10 +10,10 @@ describe('verify-discord-request', () => {
 
   beforeEach(() => {
     app = new Hono();
-    app.use(verifyDiscordRequest());
   });
 
   it('should exit if method is not post', async () => {
+    app.use(verifyDiscordRequest());
     app.get('/', (c) => c.text('c'));
 
     const req = new Request('http://localhost/');
@@ -22,27 +24,60 @@ describe('verify-discord-request', () => {
     expect(await res.text()).toBe('c');
   });
 
-  it('should fail verification process', async () => {
+  it('should verify the request', async () => {
+    const verifyMock = jest.fn();
+    verifyMock.mockReturnValueOnce(true);
+
+    app.use(verifyDiscordRequest({ lib: { verify: verifyMock } }));
     app.post('/');
 
-    const xSignatureEd25519 = [
-      '4197b08f157649fe0bd35d72cbd5b496686828b1bc2449a42d6a02f8361d988c357682',
-      'cb67e6af8c10ba0ef3fb397f076142ac763b988f953481786fd52d4b01',
-    ].join('');
-
+    const publicKey = '222';
+    const xSignatureEd25519 = '3838292';
+    const xTimestamp = '1696256136';
+    const body = JSON.stringify({ data: 'test data' });
     const req = new Request('http://localhost/', {
       method: 'POST',
       headers: {
         'x-signature-ed25519': xSignatureEd25519,
-        'x-signature-timestamp': '1696256136',
+        'x-signature-timestamp': xTimestamp,
       },
-      body: JSON.stringify({ data: 'test data' }),
+      body,
     });
-    const res = await app.fetch(req, {});
-    const data = await res.json<{ ok: boolean; msg: string }>();
 
-    expect(res.status).toBe(HTTP_CODE_UNAUTHORIZED);
-    expect(data.ok).toBe(false);
-    expect(data.msg).toBe('verifyKey failed');
+    const env = { DISCORD_PUBLIC_KEY: publicKey } as Partial<Bindings>;
+    await app.fetch(req, env);
+    // const data = await res.json<{ ok: boolean; msg: string }>();
+    const verifyExpected = [
+      Buffer.from(xTimestamp + body),
+      Buffer.from(xSignatureEd25519, 'hex'),
+      Buffer.from(publicKey, 'hex'),
+    ];
+
+    expect(verifyMock).toHaveBeenCalledWith(...verifyExpected);
+  });
+
+  it('should handle fail', async () => {
+    const verifyMock = jest.fn();
+    verifyMock.mockReturnValueOnce(false);
+
+    app.use(verifyDiscordRequest({ lib: { verify: verifyMock } }));
+    app.post('/');
+
+    const body = JSON.stringify({ data: 'test data' });
+    const req = new Request('http://localhost/', {
+      method: 'POST',
+      body,
+    });
+
+    const env = { DISCORD_PUBLIC_KEY: '' } as Partial<Bindings>;
+    const res = await app.fetch(req, env);
+    const data = await res.json();
+    const dataExpected = {
+      errors: ['verifyKey failed'],
+      msg: 'verifyDiscord',
+      ok: false,
+    };
+
+    expect(data).toEqual(dataExpected);
   });
 });

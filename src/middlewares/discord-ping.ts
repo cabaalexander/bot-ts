@@ -1,4 +1,7 @@
-import { InteractionResponseType, InteractionType } from 'discord-interactions';
+import {
+  InteractionResponseType,
+  InteractionType,
+} from 'discord-api-types/v10';
 import { type MiddlewareHandler, type Next } from 'hono';
 
 import { type ContextCustom } from '../config/types';
@@ -15,14 +18,14 @@ export default function discordPing(): MiddlewareHandler {
 
     const { type } = await c.req.json<{ type: InteractionType }>();
 
-    if (type === InteractionType.PING) {
+    if (type === InteractionType.Ping) {
       logInfo('Handling Ping request. Pong!', { noLog: Boolean(c.env.NO_LOG) });
 
       // eslint-disable-next-line
       return jsonResponse({
         schema: responseSchema,
         body: {
-          type: InteractionResponseType.PONG,
+          type: InteractionResponseType.Pong,
         },
       });
     }

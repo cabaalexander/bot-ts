@@ -1,4 +1,7 @@
-import { InteractionResponseType, InteractionType } from 'discord-interactions';
+import {
+  InteractionResponseType,
+  InteractionType,
+} from 'discord-api-types/v10';
 import { Hono } from 'hono';
 
 import discordPing from '../discord-ping';
@@ -28,13 +31,13 @@ describe('discord-ping', () => {
     const req = new Request('http://localhost/', {
       method: 'POST',
       body: JSON.stringify({
-        type: InteractionType.PING,
+        type: InteractionType.Ping,
       }),
     });
     const res = await app.fetch(req, {});
 
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ type: InteractionResponseType.PONG });
+    expect(await res.json()).toEqual({ type: InteractionResponseType.Pong });
   });
 
   it('should handle non ping requests', async () => {

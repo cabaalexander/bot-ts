@@ -14,13 +14,11 @@ describe('handlers/interactions', () => {
   let app: Hono;
   let req: Request;
   let reqNoBody: Request;
-  const command = new SlashCommand()
-    .setName('test-command')
-    .setDescription('test description')
-    .handle(() => ({
-      type: InteractionResponseType.ChannelMessageWithSource,
-      data: { content: 'showing something on discord' },
-    }));
+  const command = new SlashCommand('test-command', 'test description');
+  command.handle(() => ({
+    type: InteractionResponseType.ChannelMessageWithSource,
+    data: { content: 'showing something on discord' },
+  }));
 
   beforeEach(() => {
     app = new Hono();

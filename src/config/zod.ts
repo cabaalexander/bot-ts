@@ -12,13 +12,11 @@ export const responseSchemaError = z.object({
 
 export const commandsSchema = z.array(slashCommandSchema);
 
-export const libSchema = z.optional(
-  z.object({
-    fetch: z.function().returns(z.instanceof(Response).promise()),
-  }),
-);
+export const libSchema = z.object({
+  fetch: z.optional(z.function().returns(z.instanceof(Response).promise())),
+});
 
 export const registerCommandsSchema = z.object({
   commands: z.optional(commandsSchema),
-  lib: libSchema,
+  lib: z.optional(libSchema),
 });

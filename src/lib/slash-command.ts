@@ -8,27 +8,18 @@ type TInteractionArgs = {
   i: Interaction;
   c: ContextCustom;
 };
-type TInteractionCallback = ({
-  i,
-  c,
-}: TInteractionArgs) => APIInteractionResponse;
+type TInteractionReturn =
+  | Promise<APIInteractionResponse>
+  | APIInteractionResponse;
+type TInteractionCallback = ({ i, c }: TInteractionArgs) => TInteractionReturn;
 
 export default class SlashCommand {
-  private name!: string;
-
-  private description!: string;
+  constructor(
+    private readonly name: string,
+    private readonly description: string,
+  ) {}
 
   private interactionCallback!: TInteractionCallback;
-
-  public setName(name: string): this {
-    this.name = name;
-    return this;
-  }
-
-  public setDescription(description: string): this {
-    this.description = description;
-    return this;
-  }
 
   public build() {
     return {
@@ -42,7 +33,7 @@ export default class SlashCommand {
     return this;
   }
 
-  public execute(args: TInteractionArgs): APIInteractionResponse {
+  public execute(args: TInteractionArgs): TInteractionReturn {
     return this.interactionCallback(args);
   }
 }

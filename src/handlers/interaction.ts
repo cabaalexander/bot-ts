@@ -34,7 +34,7 @@ export default function handleInteraction({
       });
     }
 
-    const interaction = new Interaction(data);
+    const interaction = new Interaction(data, c);
 
     switch (interaction.type) {
       case InteractionType.ApplicationCommand: {
@@ -47,7 +47,7 @@ export default function handleInteraction({
           return discordError('command not triggered');
         }
 
-        const body = triggeredCommand.execute({ i: interaction, c });
+        const body = await triggeredCommand.execute({ i: interaction, c });
 
         return jsonResponse({ body });
       }

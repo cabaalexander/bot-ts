@@ -4,7 +4,7 @@ describe('SlashCommand', () => {
   let slashCommand: SlashCommand;
 
   beforeAll(() => {
-    slashCommand = new SlashCommand().setName('foo').setDescription('bar');
+    slashCommand = new SlashCommand('foo', 'bar');
   });
 
   it('should set name and description', () => {

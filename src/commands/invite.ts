@@ -8,7 +8,9 @@ import {
   Routes,
 } from 'discord-api-types/v10';
 
+import emoji from '../components/emoji';
 import SlashCommand from '../lib/slash-command';
+import getComponents from '../utils/get-components';
 
 const invite = new SlashCommand(
   'invite',
@@ -56,7 +58,11 @@ invite.handle(async ({ i, c }) => {
 
   return {
     type: InteractionResponseType.ChannelMessageWithSource,
-    data: { content: inviteUrl.toString(), flags: MessageFlags.Ephemeral },
+    data: {
+      content: inviteUrl.toString(),
+      flags: MessageFlags.Ephemeral,
+      ...getComponents([emoji]),
+    },
   };
 });
 

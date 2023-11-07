@@ -15,8 +15,3 @@ export const commandsSchema = z.array(slashCommandSchema);
 export const libSchema = z.object({
   fetch: z.optional(z.function().returns(z.instanceof(Response).promise())),
 });
-
-export const registerCommandsSchema = z.object({
-  commands: z.optional(commandsSchema),
-  lib: z.optional(libSchema),
-});

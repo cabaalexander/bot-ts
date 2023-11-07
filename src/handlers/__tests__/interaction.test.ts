@@ -41,7 +41,7 @@ describe('handlers/interactions', () => {
     app.post(
       '/',
       handleInteraction({
-        commandsDict: { 'not-command': command },
+        commands: { 'not-command': command },
       }),
     );
 
@@ -60,10 +60,7 @@ describe('handlers/interactions', () => {
   });
 
   it('should handle post request with no body', async () => {
-    app.post(
-      '/',
-      handleInteraction({ commandsDict: { 'test-command': command } }),
-    );
+    app.post('/', handleInteraction({ commands: { 'test-command': command } }));
 
     const res = await app.request(reqNoBody);
     const data = await res.json();
@@ -78,10 +75,7 @@ describe('handlers/interactions', () => {
   });
 
   it('should handle valid commands', async () => {
-    app.post(
-      '/',
-      handleInteraction({ commandsDict: { 'test-command': command } }),
-    );
+    app.post('/', handleInteraction({ commands: { 'test-command': command } }));
 
     const res = await app.request(req);
     const data = await res.json();

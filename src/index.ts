@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { basicAuth } from 'hono/basic-auth';
 
-import { getCommandsBuild } from './commands';
+import { commandsBuild } from './commands';
 import { type Bindings } from './config/types';
 import handleInteraction from './handlers/interaction';
 import discordPing from './middlewares/discord-ping';
@@ -22,7 +22,7 @@ app.use('/auth/*', async (c, next) => {
 app.get('/', (c) => c.text('👋 Hello there!')).post(handleInteraction());
 
 app
-  .get('/auth/register', registerCommands({ commands: getCommandsBuild() }))
-  .delete(unRegisterCommands({ commands: getCommandsBuild() }));
+  .get('/auth/register', registerCommands({ commands: commandsBuild }))
+  .delete(unRegisterCommands({ commands: commandsBuild }));
 
 export default app;

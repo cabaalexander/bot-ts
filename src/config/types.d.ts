@@ -1,3 +1,7 @@
+import type {
+  APIButtonComponentWithCustomId,
+  APISelectMenuComponent,
+} from 'discord-api-types/v10';
 import { type Context } from 'hono';
 
 export type Bindings = {
@@ -15,3 +19,26 @@ export type Bindings = {
 };
 
 export type ContextCustom = Context<{ Bindings: Bindings }>;
+
+export type TInteractionArgs = {
+  i: Interaction;
+  c: ContextCustom;
+};
+export type TInteractionReturn =
+  | Promise<APIInteractionResponse>
+  | APIInteractionResponse;
+export type TInteractionCallback = ({
+  i,
+  c,
+}: TInteractionArgs) => TInteractionReturn;
+
+type TCommandBuild = {
+  name: string;
+  description: string;
+};
+
+export type TComponentArgs =
+  | APIButtonComponentWithCustomId
+  | APISelectMenuComponent;
+
+export type TSlashBuild = TCommandBuild | TComponentArgs;

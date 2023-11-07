@@ -1,8 +1,8 @@
 import type { z } from 'zod';
 
 import { HTTP_CODE_BAD_REQUEST } from './config/constants';
-import { type ContextCustom } from './config/types';
-import type { registerCommandsSchema } from './config/zod';
+import type { ContextCustom, TSlashBuild } from './config/types';
+import type { libSchema } from './config/zod';
 import { commandsSchema, responseSchemaError } from './config/zod';
 import discordRequest from './utils/discord-request';
 import getCommandsUrl from './utils/get-commands-url';
@@ -11,7 +11,10 @@ import jsonResponse from './utils/json-response';
 export default function registerCommands({
   commands,
   lib,
-}: z.infer<typeof registerCommandsSchema> = {}) {
+}: {
+  commands?: Array<TSlashBuild>;
+  lib?: z.infer<typeof libSchema>;
+} = {}) {
   return async (c: ContextCustom) => {
     const commandRegisterParsed = commandsSchema.safeParse(commands);
     const guildId = c.req.query('guildId');

@@ -4,8 +4,8 @@ import {
   HTTP_CODE_BAD_REQUEST,
   HTTP_CODE_NO_CONTENT,
 } from './config/constants';
-import { type ContextCustom } from './config/types';
-import type { registerCommandsSchema } from './config/zod';
+import type { ContextCustom, TSlashBuild } from './config/types';
+import type { libSchema } from './config/zod';
 import { commandsSchema, responseSchemaError } from './config/zod';
 import discordRequest from './utils/discord-request';
 import getCommandsUrl from './utils/get-commands-url';
@@ -14,7 +14,10 @@ import jsonResponse from './utils/json-response';
 export default function unRegisterCommands({
   commands,
   lib,
-}: z.infer<typeof registerCommandsSchema> = {}) {
+}: {
+  commands?: Array<TSlashBuild>;
+  lib?: z.infer<typeof libSchema>;
+} = {}) {
   return async (c: ContextCustom) => {
     const guildId = c.req.query('guildId');
     const overrideCommands = c.req.query('all');
@@ -50,7 +53,12 @@ export default function unRegisterCommands({
     // If commands parameter is passed filter fetched commands by name
     const filteredCommandsData = shouldUseCommands
       ? commandsData.filter((cmdData) =>
-          commands.find((cmd) => cmdData.name === cmd.name),
+          commands.find((cmd) => {
+            if ('name' in cmd) {
+              return cmdData.name === cmd.name;
+            }
+            return null;
+          }),
         )
       : commandsData;
 
